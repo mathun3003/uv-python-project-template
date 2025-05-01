@@ -1,0 +1,31 @@
+# .github/workflows/run-tests.yml
+name: Run pytest Tests
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - '*'
+  release:
+    branches:
+      - 'release/*'
+
+jobs:
+  test:
+    name: pytest
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: ./.github/actions/setup-python-env
+
+      - name: "🧪 Run test cases"
+        run: |
+          source .venv/bin/activate
+          poe tests
