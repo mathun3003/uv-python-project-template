@@ -4,11 +4,11 @@ repos:
   # uv lock sync
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
-    rev: 0.8.19
+    rev: 0.11.7
     hooks:
       - id: uv-lock
   # secret detection
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.28.0
+    rev: v8.30.0
     hooks:
       - id: gitleaks
