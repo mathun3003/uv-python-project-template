@@ -1,3 +1,3 @@
-uv sync --all-groups
+uv sync --dev
 prek autoupdate
 prek install

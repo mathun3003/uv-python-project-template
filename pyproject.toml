@@ -13,20 +13,28 @@ poe = "poethepoet:main"
 poethepoet = "poethepoet.plugin:PoetryPlugin"
 
 [dependency-groups]
-ci = [
-    "mypy>=1.5.1,<2",
-    "black>=23.7.0,<24",
+lint = [
+    "ruff>=0.11.8",
+    "pycodestyle>=2.11.0,<3",
     "pylint>=2.17.5,<3",
     "isort>=5.12.0,<6",
-    "pytest>=7.1.2,<8",
-    "pytest-cov>=3.0.0,<4",
-    "pycodestyle>=2.11.0,<3",
-    "ruff>=0.11.8",
-    "prek",
 ]
 
-[tool.uv]
-default-groups = ["ci"]
+types = [
+    "ty>=0.0.31",
+]
+
+test = [
+    "pytest>=7.1.2,<8",
+    "pytest-cov>=3.0.0,<4",
+]
+
+dev = [
+    "prek",
+    {include-group = "lint"},
+    {include-group = "types"},
+    {include-group = "test"}
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -43,8 +51,8 @@ _clean_docs.script = "shutil:rmtree('docs/_build', ignore_errors=1)"
     cmd = "uv sync --all-groups"
 
 [tool.poe.tasks.typing]
-    help = "Run MyPy checker on the code base"
-    cmd  = "mypy blueprint_project"
+    help = "Run ty type checker on the code base"
+    cmd  = "ty check blueprint_project"
 
 [tool.poe.tasks.lint]
     help = "Run Ruff linter"
@@ -55,16 +63,12 @@ _clean_docs.script = "shutil:rmtree('docs/_build', ignore_errors=1)"
     cmd = "ruff check --fix"
 
 [tool.poe.tasks.format]
-help = "Format code using Ruff"
-cmd  = "ruff format"
+    help = "Format code using Ruff"
+    cmd  = "ruff format"
 
 [tool.poe.tasks.isort-fix]
     help = "Sort imports. This affects the code base as this makes changes to affected files."
     cmd = "isort blueprint_project"
-
-[tool.poe.tasks.black]
-    help = "Format code using black. This affects the code base as this makes changes to affected files."
-    cmd = "black blueprint_project"
 
 [tool.poe.tasks.isort]
     help = "Validate isort code style"
