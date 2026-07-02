@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Blueprint template for Python projects."
 requires-python = ">=3.11"
 readme = "README.md"
-dependencies = ["poethepoet>=0.22.1,<0.23"]
+dependencies = []
 
 [project.scripts]
 poe = "poethepoet:main"
@@ -16,11 +16,9 @@ poethepoet = "poethepoet.plugin:PoetryPlugin"
 lint = [
     "ruff>=0.11.8",
     "pycodestyle>=2.11.0,<3",
-    "pylint>=2.17.5,<3",
-    "isort>=5.12.0,<6",
 ]
 
-types = [
+typing = [
     "ty>=0.0.31",
 ]
 
@@ -31,8 +29,9 @@ test = [
 
 dev = [
     "prek",
+    "poethepoet>=0.22.1,<0.23",
     {include-group = "lint"},
-    {include-group = "types"},
+    {include-group = "typing"},
     {include-group = "test"}
 ]
 
@@ -48,7 +47,7 @@ _clean_docs.script = "shutil:rmtree('docs/_build', ignore_errors=1)"
 
 [tool.poe.tasks.dev-setup]
     help = "Setup the project for development"
-    cmd = "uv sync --all-groups"
+    cmd = "uv sync --dev"
 
 [tool.poe.tasks.typing]
     help = "Run ty type checker on the code base"
@@ -66,21 +65,13 @@ _clean_docs.script = "shutil:rmtree('docs/_build', ignore_errors=1)"
     help = "Format code using Ruff"
     cmd  = "ruff format"
 
-[tool.poe.tasks.isort-fix]
-    help = "Sort imports. This affects the code base as this makes changes to affected files."
-    cmd = "isort blueprint_project"
-
-[tool.poe.tasks.isort]
-    help = "Validate isort code style"
-    cmd  = "isort blueprint_project --check --diff"
-
 [tool.poe.tasks.tests]
     help = "Run unit and feature tests"
     cmd  = "pytest tests --cov=blueprint_project"
 
 [tool.poe.tasks.ci]
     help     = "Execute all CI tasks"
-    sequence = ["typing", "lint", "isort", "tests"]
+    sequence = ["typing", "lint", "tests"]
     ignore_fail = true
 
 [tool.poe.tasks.clean]
@@ -115,21 +106,12 @@ line-length = 120
 src = ["blueprint_project"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I"]
-extend-select = ["I"]
-
-[tool.isort]
-profile = "black"
-py_version = 311
+select = ["E", "F", "I", "B", "UP"]
 
 [tool.black]
 line-length = 120
 target-version = ["py311"]
 skip-string-normalization = true
-
-[tool.mypy]
-python_version = "3.11"
-ignore_missing_imports = true
 
 [tool.pylint]
 max-line-length = 120
