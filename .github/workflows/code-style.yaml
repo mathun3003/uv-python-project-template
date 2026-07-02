@@ -11,7 +11,7 @@ on:
 jobs:
 
   typing:
-    name: MyPy
+    name: ty
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,7 +19,7 @@ jobs:
 
       - uses: ./.github/actions/setup-python-env
 
-      - name: 🔍 Run mypy
+      - name: 🔍 Run ty
         run: |
           source .venv/bin/activate
           poe typing
@@ -39,20 +39,3 @@ jobs:
         run: |
           source .venv/bin/activate
           poe lint
-
-  isort:
-    name: isort
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - uses: ./.github/actions/setup-python-env
-
-      - name: 🔍 Run isort
-        run: |
-          source .venv/bin/activate
-          poe isort
